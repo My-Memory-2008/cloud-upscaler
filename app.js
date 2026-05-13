@@ -1,17 +1,9 @@
-// 🔑 MULTI-API POOL (Client-side config for tracking which API to use)
+// ✅ SIMPLIFIED API POOL (Only working APIs)
 const API_POOL = [
-  { name: "HF Real-ESRGAN (Xenova)" },
-  { name: "HF Swin2SR Classical 4x" },
-  { name: "HF Stable Diffusion x4" },
-  { name: "DeepAI Torch-SRGAN" },
-  { name: "HF Swin2SR Real-World" },
-  { name: "HF Real-ESRGAN (ai-forever)" },
-  { name: "HF Swin2SR Lightweight 2x" },
-  { name: "Replicate Real-ESRGAN" },
-  { name: "Cloudinary Upscale" },
-  { name: "Stable Diffusion API" },
-  { name: "Replicate Waifu2x" },
-  { name: "Pixelcut Upscaler" }
+  { name: "HF Real-ESRGAN (Basic)" },
+  { name: "HF SwinIR" },
+  { name: "HF CodeFormer" },
+  { name: "Replicate Real-ESRGAN" }
 ];
 
 let currentApiIndex = 0;
@@ -59,76 +51,56 @@ function log(msg, type = 'info') {
 
 async function callUpscaleAPI(file) {
   if (currentApiIndex >= API_POOL.length) {
-    throw new Error('All 12 APIs exhausted. Try again later.');
+    throw new Error('All APIs exhausted. Try again later.');
   }
 
   const api = API_POOL[currentApiIndex];
-  log(`🔄 Trying API ${currentApiIndex + 1}/12: ${api.name}`, 'wait');
+  log(`🔄 Trying API ${currentApiIndex + 1}/${API_POOL.length}: ${api.name}`, 'wait');
 
   try {
-    // Create FormData for our proxy
     const formData = new FormData();
     formData.append('image', file);
     formData.append('apiIndex', currentApiIndex.toString());
 
-    // Call our Vercel serverless proxy (CORS-free)
     const response = await fetch('/api/upscale', {
       method: 'POST',
       body: formData
     });
 
-    // Handle specific error responses
     if (response.status === 400) {
       const errorData = await response.json();
       
       if (errorData.skip) {
-        log(`⏭️ ${api.name} not configured. Skipping to next API...`, 'switch');
+        log(`⏭️ ${api.name} not configured. Skipping...`, 'switch');
         currentApiIndex++;
-        return await callUpscaleAPI(file); // Try next API
+        return await callUpscaleAPI(file);
       }
       throw new Error(errorData.error || 'Bad request');
     }
 
-    if (response.status === 429) {
-      const errorData = await response.json();
-      
-      if (errorData.switchApi) {
-        log(`🚫 ${api.name} rate limited (429). Switching to next API...`, 'switch');
-        currentApiIndex++;
-        await new Promise(r => setTimeout(r, 1000)); // Brief delay
-        return await callUpscaleAPI(file); // Try next API
-      }
-    }
-
-    if (response.status === 503) {
-      const errorData = await response.json();
-      
-      if (errorData.retry || errorData.switchApi) {
-        log(`⏳ ${api.name} model loading (503). Switching to next API...`, 'switch');
-        currentApiIndex++;
-        await new Promise(r => setTimeout(r, 1000)); // Brief delay
-        return await callUpscaleAPI(file); // Try next API
-      }
+    if (response.status === 429 || response.status === 503) {
+      log(`🚫 ${api.name} rate limited/loading. Switching...`, 'switch');
+      currentApiIndex++;
+      await new Promise(r => setTimeout(r, 1000));
+      return await callUpscaleAPI(file);
     }
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`HTTP ${response.status}: ${errorData.details || errorData.error || response.statusText}`);
     }
 
-    // Success! Return the blob
     log(`✅ ${api.name} succeeded!`, 'success');
     return await response.blob();
 
   } catch (error) {
-    // Auto-switch to next API on error
     if (currentApiIndex < API_POOL.length - 1) {
       log(`❌ ${api.name} failed: ${error.message}`, 'error');
       currentApiIndex++;
-      await new Promise(r => setTimeout(r, 500)); // Brief delay before retry
-      return await callUpscaleAPI(file); // Retry with next API
+      await new Promise(r => setTimeout(r, 500));
+      return await callUpscaleAPI(file);
     }
-    throw error; // No more APIs to try
+    throw error;
   }
 }
 
@@ -136,7 +108,7 @@ async function processQueue(fallbackDownload = false) {
   if (isProcessing) return;
   isProcessing = true;
   selectFolderBtn.disabled = true;
-  currentApiIndex = 0; // Reset to first API for new batch
+  currentApiIndex = 0;
 
   log(`🚀 Starting batch processing of ${imageFiles.length} image(s)...`, 'info');
 
@@ -152,7 +124,6 @@ async function processQueue(fallbackDownload = false) {
       const newName = file.name.replace(/\.[^/.]+$/, '') + '_upscaled.png';
 
       if (fallbackDownload) {
-        // Fallback: individual downloads for browsers without folder API
         const url = URL.createObjectURL(upscaledBlob);
         const a = document.createElement('a');
         a.href = url;
@@ -163,7 +134,6 @@ async function processQueue(fallbackDownload = false) {
         URL.revokeObjectURL(url);
         log(`⬇️ Downloaded: ${newName}`, 'success');
       } else {
-        // Save directly to chosen folder
         const handle = await saveDirectory.getFileHandle(newName, { create: true });
         const writable = await handle.createWritable();
         await writable.write(upscaledBlob);
@@ -174,9 +144,7 @@ async function processQueue(fallbackDownload = false) {
       log(`❌ Failed: ${file.name} → ${err.message}`, 'error');
     }
 
-    // Polite delay between images to avoid overwhelming APIs
     if (i < imageFiles.length - 1) {
-      log(`⏱️ Waiting 2 seconds before next image...`, 'wait');
       await new Promise(r => setTimeout(r, 2000));
     }
   }
