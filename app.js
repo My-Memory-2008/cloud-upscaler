@@ -1,12 +1,6 @@
-// ✅ API POOL (matches server config)
-const API_POOL = [
-  { name: "HF Real-ESRGAN (Providers)" },
-  { name: "HF Swin2SR (Providers)" },
-  { name: "Replicate Real-ESRGAN" },
-  { name: "Replicate SwinIR" }
-];
+// ✅ Simplified: Single API (Replicate)
+const API_POOL = [{ name: "Replicate Real-ESRGAN" }];
 
-let currentApiIndex = 0;
 let imageFiles = [];
 let saveDirectory = null;
 let isProcessing = false;
@@ -37,7 +31,9 @@ selectFolderBtn.addEventListener('click', async () => {
     saveDirectory = await window.showDirectoryPicker();
     statusEl.textContent = 'Folder selected. Starting cloud upscaling...';
     await processQueue(false);
-  } catch { log('Folder selection canceled.', 'wait'); }
+  } catch { 
+    log('Folder selection canceled.', 'wait'); 
+  }
 });
 
 function log(msg, type = 'info') {
@@ -48,61 +44,31 @@ function log(msg, type = 'info') {
 }
 
 async function callUpscaleAPI(file) {
-  if (currentApiIndex >= API_POOL.length) {
-    throw new Error('All APIs exhausted. Try again later.');
-  }
-
-  const api = API_POOL[currentApiIndex];
-  log(`🔄 Trying API ${currentApiIndex + 1}/${API_POOL.length}: ${api.name}`, 'wait');
+  log(`🔄 Sending to Replicate cloud...`, 'wait');
 
   try {
     const formData = new FormData();
     formData.append('image', file);
-    formData.append('apiIndex', currentApiIndex.toString());
 
     const response = await fetch('/api/upscale', {
       method: 'POST',
       body: formData
     });
 
-    if (response.status === 400) {
-      const errorData = await response.json().catch(() => ({}));
-      if (errorData.skip) {
-        log(`⏭️ ${api.name} not configured. Skipping...`, 'switch');
-        currentApiIndex++;
-        return await callUpscaleAPI(file);
-      }
-      throw new Error(errorData.error || 'Bad request');
-    }
-
-    if (response.status === 429 || response.status === 503) {
-      log(`🚫 ${api.name} rate limited/loading. Switching...`, 'switch');
-      currentApiIndex++;
-      await new Promise(r => setTimeout(r, 1500));
-      return await callUpscaleAPI(file);
-    }
-
     if (response.status === 401) {
-      log(`🔐 ${api.name} auth failed. Check token. Switching...`, 'switch');
-      currentApiIndex++;
-      return await callUpscaleAPI(file);
+      const err = await response.json();
+      throw new Error(`Auth failed: ${err.detail || 'Invalid Replicate token'}`);
     }
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(`HTTP ${response.status}: ${errorData.details || errorData.error || response.statusText}`);
+      const err = await response.json().catch(() => ({}));
+      throw new Error(`HTTP ${response.status}: ${err.error || response.statusText}`);
     }
 
-    log(`✅ ${api.name} succeeded!`, 'success');
+    log(`✅ Replicate succeeded!`, 'success');
     return await response.blob();
 
   } catch (error) {
-    if (currentApiIndex < API_POOL.length - 1) {
-      log(`❌ ${api.name} failed: ${error.message}`, 'error');
-      currentApiIndex++;
-      await new Promise(r => setTimeout(r, 800));
-      return await callUpscaleAPI(file);
-    }
     throw error;
   }
 }
@@ -111,7 +77,6 @@ async function processQueue(fallbackDownload = false) {
   if (isProcessing) return;
   isProcessing = true;
   selectFolderBtn.disabled = true;
-  currentApiIndex = 0;
 
   log(`🚀 Starting batch of ${imageFiles.length} image(s)...`, 'info');
 
@@ -142,7 +107,8 @@ async function processQueue(fallbackDownload = false) {
       log(`❌ Failed: ${file.name} → ${err.message}`, 'error');
     }
 
-    if (i < imageFiles.length - 1) await new Promise(r => setTimeout(r, 2000));
+    // Delay between images to avoid rate limits
+    if (i < imageFiles.length - 1) await new Promise(r => setTimeout(r, 3000));
   }
 
   progressBar.style.width = '100%';
