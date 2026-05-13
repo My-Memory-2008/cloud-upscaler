@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud Bulk Image Upscaler</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>☁️ Cloud Bulk Upscaler</h1>
+    <p>Upload 1–20 images. AI runs on free cloud APIs. Auto-switches when limits hit. Zero cost.</p>
+    
+    <input type="file" id="imageInput" multiple accept="image/*" class="hidden">
+    <button id="uploadBtn">📁 Choose Images</button>
+    <button id="selectFolderBtn" disabled>📂 Choose Save Folder</button>
+    
+    <div id="status">Ready</div>
+    <div class="progress-container"><div id="progressBar"></div></div>
+    <div id="logBox"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
