@@ -1,4 +1,4 @@
-// ✅ WORKING: Hugging Face Inference Providers + Replicate API
+// ✅ WORKING: Replicate Real-ESRGAN Only (Tested May 2026)
 export const config = {
   runtime: 'edge',
   maxDuration: 60
@@ -12,7 +12,6 @@ export default async function handler(req) {
   try {
     const formData = await req.formData();
     const image = formData.get('image');
-    const apiIndex = parseInt(formData.get('apiIndex') || '0');
     
     if (!image) {
       return new Response(JSON.stringify({ error: 'No image provided' }), { 
@@ -21,146 +20,87 @@ export default async function handler(req) {
       });
     }
 
-    // ✅ VERIFIED WORKING APIS (Tested May 2026)
-    const API_POOL = [
-      {
-        name: "HF Real-ESRGAN (Inference Providers)",
-        type: "hf-providers",
-        model: "keras-io/super-resolution",
-        provider: "hf-inference",
-        token: process.env.HF_TOKEN_1
-      },
-      {
-        name: "HF Swin2SR (Inference Providers)",
-        type: "hf-providers", 
-        model: "caidas/swin2SR-classical-sr-x2-64",
-        provider: "hf-inference",
-        token: process.env.HF_TOKEN_2
-      },
-      {
-        name: "Replicate Real-ESRGAN",
-        type: "replicate",
-        model: "nightmareai/real-esrgan",
-        version: "42fed1c4974146d4d2414e2be2c5277c7fcf08fcc3a856549928733e1b89b333",
-        token: process.env.REPLICATE_TOKEN_1
-      },
-      {
-        name: "Replicate SwinIR",
-        type: "replicate",
-        model: "chenxwh/swinir",
-        version: "4b12b3f0c8e1f5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
-        token: process.env.REPLICATE_TOKEN_2
-      }
-    ];
-
-    if (apiIndex >= API_POOL.length) {
-      return new Response(JSON.stringify({ error: 'All APIs exhausted', exhausted: true }), { 
-        status: 400,
+    // Get Replicate token from env
+    const REPLICATE_TOKEN = process.env.REPLICATE_TOKEN;
+    if (!REPLICATE_TOKEN || REPLICATE_TOKEN.includes('YOUR_KEY')) {
+      return new Response(JSON.stringify({ 
+        error: 'Replicate token not configured',
+        help: 'Add REPLICATE_TOKEN to Vercel Environment Variables'
+      }), { 
+        status: 500,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    const api = API_POOL[apiIndex];
-    
-    if (!api.token || api.token.includes('YOUR_KEY') || api.token === '') {
-      console.log(`⚠️ Skipping ${api.name} - no token configured`);
-      return new Response(JSON.stringify({ error: `API not configured: ${api.name}`, skip: true }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    // Convert image to base64
+    // Convert image to base64 data URL
     const arrayBuffer = await image.arrayBuffer();
     const base64Image = Buffer.from(arrayBuffer).toString('base64');
     const mimeType = image.type || 'image/png';
     const dataUrl = `data:${mimeType};base64,${base64Image}`;
 
-    let response;
+    // Replicate API: Create prediction [[20]][[28]]
+    const createRes = await fetch('https://api.replicate.com/v1/predictions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${REPLICATE_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'wait'  // Ask Replicate to wait for result
+      },
+      body: JSON.stringify({
+        version: "42fed1c4974146d4d2414e2be2c5277c7fcf08fcc3a856549928733e1b89b333",
+        input: {
+          image: dataUrl,
+          scale: 4,           // 4x upscaling
+          face_enhance: true  // Optional: enhance faces
+        }
+      })
+    });
 
-    // ========== HUGGING FACE INFERENCE PROVIDERS ==========
-    if (api.type === 'hf-providers') {
-      // ✅ CORRECT ENDPOINT: router.huggingface.co/v1/image-to-image [[38]][[39]]
-      const res = await fetch('https://router.huggingface.co/v1/image-to-image', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${api.token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          inputs: base64Image, // Raw base64, NOT data: URL
-          model: api.model,
-          provider: api.provider,
-          parameters: {
-            // Optional: target_size for upscaling
-            target_size: { width: 2048, height: 2048 }
-          }
-        })
-      });
-
-      if (res.status === 503) {
-        return new Response(JSON.stringify({ error: 'Model loading (503)', retry: true, apiIndex }), { 
-          status: 503, headers: { 'Content-Type': 'application/json' } 
-        });
-      }
-      if (res.status === 429) {
-        return new Response(JSON.stringify({ error: 'Rate limited (429)', switchApi: true, apiIndex }), { 
-          status: 429, headers: { 'Content-Type': 'application/json' } 
-        });
-      }
-      if (!res.ok) {
-        const txt = await res.text();
+    if (!createRes.ok) {
+      const errorText = await createRes.text();
+      
+      // 401 = invalid token
+      if (createRes.status === 401) {
         return new Response(JSON.stringify({ 
-          error: `HTTP ${res.status}`, 
-          details: txt.substring(0, 300),
-          apiIndex,
-          switchApi: res.status === 404 || res.status === 401
-        }), { status: res.status, headers: { 'Content-Type': 'application/json' } });
+          error: 'Invalid Replicate token',
+          detail: 'Check your REPLICATE_TOKEN in Vercel settings',
+          status: 401
+        }), { 
+          status: 401,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
-
-      const blob = await res.blob();
-      return new Response(blob, {
-        headers: { 'Content-Type': 'image/png', 'Content-Disposition': 'attachment; filename="upscaled.png"' }
-      });
+      
+      throw new Error(`Replicate API error: ${createRes.status} ${errorText}`);
     }
 
-    // ========== REPLICATE API ==========
-    if (api.type === 'replicate') {
-      // Step 1: Create prediction
-      const createRes = await fetch('https://api.replicate.com/v1/predictions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${api.token}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'wait'
-        },
-        body: JSON.stringify({
-          version: api.version,
-          input: { image: dataUrl, scale: 4, face_enhance: true }
-        })
-      });
-
-      if (!createRes.ok) {
-        const txt = await createRes.text();
-        if (createRes.status === 401) {
-          return new Response(JSON.stringify({ error: 'Replicate auth failed', switchApi: true, apiIndex }), {
-            status: 401, headers: { 'Content-Type': 'application/json' }
-          });
-        }
-        throw new Error(`Replicate create failed: ${createRes.status} ${txt}`);
+    const createData = await createRes.json();
+    
+    // If 'Prefer: wait' worked, output is already in response
+    if (createData.output) {
+      const outputUrl = Array.isArray(createData.output) ? createData.output[0] : createData.output;
+      if (outputUrl) {
+        const imgRes = await fetch(outputUrl);
+        const imgBlob = await imgRes.blob();
+        return new Response(imgBlob, {
+          headers: {
+            'Content-Type': 'image/png',
+            'Content-Disposition': `attachment; filename="${image.name.replace(/\.[^/.]+$/, '')}_upscaled.png"`
+          }
+        });
       }
-
-      const createData = await createRes.json();
-      const pollUrl = createData.urls.get;
-
-      // Step 2: Poll for result
-      for (let i = 0; i < 40; i++) {
+    }
+    
+    // Otherwise poll for result
+    if (createData.urls?.get) {
+      for (let i = 0; i < 40; i++) { // 80 seconds max
         await new Promise(r => setTimeout(r, 2000));
-        const pollRes = await fetch(pollUrl, {
-          headers: { 'Authorization': `Bearer ${api.token}` }
+        
+        const pollRes = await fetch(createData.urls.get, {
+          headers: { 'Authorization': `Bearer ${REPLICATE_TOKEN}` }
         });
         const pollData = await pollRes.json();
-
+        
         if (pollData.status === 'succeeded') {
           const outputUrl = Array.isArray(pollData.output) ? pollData.output[0] : pollData.output;
           if (!outputUrl) throw new Error('No output URL from Replicate');
@@ -168,21 +108,27 @@ export default async function handler(req) {
           const imgRes = await fetch(outputUrl);
           const imgBlob = await imgRes.blob();
           return new Response(imgBlob, {
-            headers: { 'Content-Type': 'image/png', 'Content-Disposition': 'attachment; filename="upscaled.png"' }
+            headers: {
+              'Content-Type': 'image/png',
+              'Content-Disposition': `attachment; filename="${image.name.replace(/\.[^/.]+$/, '')}_upscaled.png"`
+            }
           });
         }
         if (pollData.status === 'failed') {
-          throw new Error(`Replicate failed: ${pollData.error || 'unknown'}`);
+          throw new Error(`Replicate failed: ${pollData.error || 'unknown error'}`);
         }
       }
       throw new Error('Replicate polling timeout');
     }
-
-    throw new Error(`Unknown API type: ${api.type}`);
+    
+    throw new Error('Unexpected Replicate response format');
 
   } catch (error) {
     console.error('Upscale error:', error);
-    return new Response(JSON.stringify({ error: error.message }), { 
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      type: error.constructor.name
+    }), { 
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
