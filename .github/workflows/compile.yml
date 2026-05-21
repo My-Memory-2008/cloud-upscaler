@@ -1,0 +1,30 @@
+name: Compile Desktop App
+on:
+  push:
+    branches: [ main ] # Runs automatically every time you save changes
+
+jobs:
+  build:
+    runs-on: windows-latest # Uses a free cloud Windows machine to compile
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        pip install PyQt5 PyQtWebEngine selenium requests pyinstaller
+
+    - name: Build Executable File
+      run: |
+        pyinstaller --noconsole --onefile launcher.py
+
+    - name: Upload Finished Executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: NeuralScale-Launcher-Windows
+        path: dist/launcher.exe
