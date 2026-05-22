@@ -83,13 +83,17 @@
 
     <script>
         // Paste your live Cloudflare Worker deployment URL here!
+// Paste your live Cloudflare Worker deployment URL here!
 const cloudflareProxyUrl = "https://hf-api-proxy.asjad28072008.workers.dev/";
 
 let selectedFileBlob = null;
 
 function fileSelected(e) {
-    selectedFileBlob = e.target.files[0]; // Fixed file indexing capture
-    if (selectedFileBlob) {
+    const fileList = e.target.files; 
+    if (fileList && fileList.length > 0) {
+        // FIXED STEP: Extract the absolute first file blob out of the collection array
+        selectedFileBlob = fileList[0]; 
+        
         if (selectedFileBlob.size > 4 * 1024 * 1024) {
             alert("To maintain high speed for all users, max file size is capped at 4MB.");
             return;
@@ -118,9 +122,12 @@ async function initiateHighTrafficUpscale() {
     }, 450);
 
     try {
-        // Send image file straight to Cloudflare Shield Worker
+        // Send the pure, isolated image pixel data directly to Cloudflare
         let response = await fetch(cloudflareProxyUrl, {
             method: "POST",
+            headers: {
+                "Content-Type": selectedFileBlob.type
+            },
             body: selectedFileBlob
         });
 
@@ -137,7 +144,6 @@ async function initiateHighTrafficUpscale() {
                 document.getElementById("finalImg").src = URL.createObjectURL(finalImageBlob);
             }, 700);
         } else {
-            let errorData = await response.json();
             alert("Server nodes busy responding to viral load. Shifting layers, please click Upscale again.");
             resetWorkspace();
         }
@@ -165,6 +171,7 @@ function resetWorkspace() {
     document.getElementById("mainWorkspace").style.display = "block";
     document.getElementById("fillBar").style.width = "0%";
 }
+
 
     </script>
 </body>
