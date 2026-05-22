@@ -1,11 +1,11 @@
 name: Compile Desktop App
 on:
   push:
-    branches: [ main ] # Runs automatically every time you save changes
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: windows-latest # Uses a free cloud Windows machine to compile
+    runs-on: windows-latest
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
@@ -27,4 +27,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: NeuralScale-Launcher-Windows
-        path: dist/launcher.exe
+        path: dist/launcher.exe # Tells GitHub to upload only the compiled .exe file
+        if-no-files-found: error # Immediately alerts you if PyInstaller failed to build the binary
