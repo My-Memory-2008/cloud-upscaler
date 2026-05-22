@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt
 
 # Configurations
 # Replace this with the share link you got from Google Colab in Step 1
-COLAB_NOTEBOOK_URL = "https://google.com"
+COLAB_NOTEBOOK_URL = "https://colab.research.google.com/drive/17LKzXTi4iCe_JrZzlzXa8mtcKpDPZ25c?"
 # Keep this exactly matching the ID inside your Step 2 index.html file
 TRACKING_NODE_ID = "neuralscale_node_cluster_global"
 
