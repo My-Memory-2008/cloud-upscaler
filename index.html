@@ -84,15 +84,15 @@
     <script>
         // Paste your live Cloudflare Worker deployment URL here!
 // Paste your live Cloudflare Worker deployment URL here!
+// Points directly to your relative Vercel deployment folder path
 const cloudflareProxyUrl = "/api/upscale";
 
 let selectedFileBlob = null;
 
 function fileSelected(e) {
-    const fileList = e.target.files; 
+    const fileList = e.target.files;
     if (fileList && fileList.length > 0) {
-        // FIXED STEP: Extract the absolute first file blob out of the collection array
-        selectedFileBlob = fileList[0]; 
+        selectedFileBlob = fileList[0];
         
         if (selectedFileBlob.size > 4 * 1024 * 1024) {
             alert("To maintain high speed for all users, max file size is capped at 4MB.");
@@ -102,6 +102,14 @@ function fileSelected(e) {
         document.getElementById("procBtn").disabled = false;
     }
 }
+
+// Convert image binary into plain Base64 Text layout
+const convertToBase64 = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result.split(',')[1]); // Strip mimetype prefix cleanly
+    reader.onerror = (error) => reject(error);
+});
 
 async function initiateHighTrafficUpscale() {
     if (!selectedFileBlob) return;
@@ -122,13 +130,18 @@ async function initiateHighTrafficUpscale() {
     }, 450);
 
     try {
-        // Send the pure, isolated image pixel data directly to Cloudflare
+        const base64String = await convertToBase64(selectedFileBlob);
+
+        // POST image as a clean JSON text payload rather than binary data forms
         let response = await fetch(cloudflareProxyUrl, {
             method: "POST",
             headers: {
-                "Content-Type": selectedFileBlob.type
+                "Content-Type": "application/json"
             },
-            body: selectedFileBlob
+            body: JSON.stringify({ 
+                image: base64String,
+                mimeType: selectedFileBlob.type 
+            })
         });
 
         clearInterval(progressTimer);
