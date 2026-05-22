@@ -82,153 +82,13 @@
     </div>
 
     <script>
-        // PASTE ALL YOUR GENERATED HUGGING FACE KEYS HERE INSIDE THE QUOTES
-        // const apiClusterPool = [
-        //     "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",
-        //     "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",
-        //     "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"
-        //     // Continue listing all 50+ keys cleanly separated by commas...
-        // ];
-
-        // // High-end open-source model optimized for Super Resolution upscaling
-        // const modelEndpoint = "https://huggingface.co";
-
-        // let selectedFileBlob = null;
-        // let activeKeyIndex = 0;
-
-        // function fileSelected(e) {
-        //     selectedFileBlob = e.target.files[0];
-        //     if (selectedFileBlob) {
-        //         // Ensure files do not break free-tier bandwidth caps
-        //         if (selectedFileBlob.size > 4 * 1024 * 1024) {
-        //             alert("To maintain high speed for all users, max file size is capped at 4MB.");
-        //             return;
-        //         }
-        //         document.getElementById("uploadLabel").innerText = `Target: ${selectedFileBlob.name}`;
-        //         document.getElementById("procBtn").disabled = false;
-        //     }
-        // }
-
-        // function getNextApiKey() {
-        //     const key = apiClusterPool[activeKeyIndex];
-        //     activeKeyIndex = (activeKeyIndex + 1) % apiClusterPool.length; // Flawless round-robin loop mapping
-        //     return key;
-        // }
-
-        // async function initiateHighTrafficUpscale() {
-        //     if (!selectedFileBlob) return;
-
-        //     // Transition UI views
-        //     document.getElementById("mainWorkspace").style.display = "none";
-        //     document.getElementById("monetizationView").style.display = "block";
-
-        //     let displayPercent = 0;
-        //     const loaderBar = document.getElementById("fillBar");
-        //     const loaderLabel = document.getElementById("percentLabel");
-
-        //     // Deliberate artificial progress tracker ensures maximum user ad exposure view-time metrics
-        //     const progressTimer = setInterval(() => {
-        //         if (displayPercent < 94) {
-        //             displayPercent += Math.floor(Math.random() * 2) + 1;
-        //             loaderBar.style.width = `${displayPercent}%`;
-        //             loaderLabel.innerText = `Re-structuring Resolution Tensors: ${displayPercent}%`;
-        //         }
-        //     }, 450);
-
-        //     let totalPoolSize = apiClusterPool.length;
-        //     let attempts = 0;
-        //     let finalImageBlob = null;
-
-        //     // THE HIGH-TRAFFIC PROTECTION LOOP
-        //     while (attempts < totalPoolSize) {
-        //         const currentToken = getNextApiKey();
-        //         try {
-        //             let response = await fetch(modelEndpoint, {
-        //                 method: "POST",
-        //                 headers: {
-        //                     "Authorization": `Bearer ${currentToken}`,
-        //                     "Content-Type": selectedFileBlob.type
-        //                 },
-        //                 body: selectedFileBlob
-        //             });
-
-        //             // Server waking up (Cold Start) - wait 4 seconds and continue using same token profile
-        //             if (response.status === 503) {
-        //                 await new Promise(resolve => setTimeout(resolve, 4000));
-        //                 continue;
-        //             }
-
-        //             // Key rate-limited (429) or invalid - immediately discard and skip to next key in loop [1]
-        //             if (!response.ok) {
-        //                 attempts++;
-        //                 continue;
-        //             }
-
-        //             // Success! Grab output image file data
-        //             finalImageBlob = await response.blob();
-        //             break;
-
-        //         } catch (networkError) {
-        //             attempts++; // Network failover mapping
-        //         }
-        //     }
-
-        //     clearInterval(progressTimer);
-
-        //     if (finalImageBlob) {
-        //         loaderBar.style.width = "100%";
-        //         loaderLabel.innerText = "Matrix Computation Success.";
-                
-        //         setTimeout(() => {
-        //             document.getElementById("monetizationView").style.display = "none";
-        //             document.getElementById("downloadView").style.display = "block";
-        //             document.getElementById("finalImg").src = URL.createObjectURL(finalImageBlob);
-        //         }, 700);
-        //     } else {
-        //         alert("The cluster arrays are heavily congested. Shifting data blocks, please try upscaling again.");
-        //         resetWorkspace();
-        //     }
-        // }
-
-        // function downloadImage() {
-        //     const downloadLink = document.createElement("a");
-        //     downloadLink.href = document.getElementById("finalImg").src;
-        //     downloadLink.download = `neuralscale_4k_${Date.now()}.png`;
-        //     downloadLink.click();
-        // }
-
-        // function resetWorkspace() {
-        //     selectedFileBlob = null;
-        //     document.getElementById("imgFile").value = "";
-        //     document.getElementById("uploadLabel").innerText = "Click or Drag Image Here";
-        //     document.getElementById("procBtn").disabled = true;
-        //     document.getElementById("downloadView").style.display = "none";
-        //     document.getElementById("monetizationView").style.display = "none";
-        //     document.getElementById("mainWorkspace").style.display = "block";
-        //     document.getElementById("fillBar").style.width = "0%";
-        // }
-
-        // 1. YOUR API TOKEN POOL
-const apiClusterPool = [
-    "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",
-    "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",
-    "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"
-    // Expand this pool to 20-50 keys to eliminate rate limits completely!
-];
-
-// 2. HIGH-TRAFFIC MULTI-MODEL MIRRORS
-// If the primary model is sleeping or busy, the script automatically falls back to secondary mirrors.
-const modelEndpoints = [
-    "https://huggingface.co", // Primary
-    "https://huggingface.co",                   // Mirror 1
-    "https://huggingface.co"                       // Mirror 2
-];
+        // Paste your live Cloudflare Worker deployment URL here!
+const cloudflareProxyUrl = "https://hf-api-proxy.asjad28072008.workers.dev/";
 
 let selectedFileBlob = null;
-let activeKeyIndex = 0;
 
 function fileSelected(e) {
-    selectedFileBlob = e.target.files[0];
+    selectedFileBlob = e.target.files[0]; // Fixed file indexing capture
     if (selectedFileBlob) {
         if (selectedFileBlob.size > 4 * 1024 * 1024) {
             alert("To maintain high speed for all users, max file size is capped at 4MB.");
@@ -237,12 +97,6 @@ function fileSelected(e) {
         document.getElementById("uploadLabel").innerText = `Target: ${selectedFileBlob.name}`;
         document.getElementById("procBtn").disabled = false;
     }
-}
-
-function getNextApiKey() {
-    const key = apiClusterPool[activeKeyIndex];
-    activeKeyIndex = (activeKeyIndex + 1) % apiClusterPool.length;
-    return key;
 }
 
 async function initiateHighTrafficUpscale() {
@@ -256,80 +110,40 @@ async function initiateHighTrafficUpscale() {
     const loaderLabel = document.getElementById("percentLabel");
 
     const progressTimer = setInterval(() => {
-        if (displayPercent < 95) {
+        if (displayPercent < 98) {
             displayPercent += Math.floor(Math.random() * 2) + 1;
             loaderBar.style.width = `${displayPercent}%`;
-            loaderLabel.innerText = `Synchronizing Distributed AI Clusters: ${displayPercent}%`;
+            loaderLabel.innerText = `Processing High-Res Matrix: ${displayPercent}%`;
         }
-    }, 500);
+    }, 450);
 
-    let finalImageBlob = null;
-    let success = false;
+    try {
+        // Send image file straight to Cloudflare Shield Worker
+        let response = await fetch(cloudflareProxyUrl, {
+            method: "POST",
+            body: selectedFileBlob
+        });
 
-    // Outer Loop: Try different models if one is failing
-    for (let currentModel of modelEndpoints) {
-        let tokensTested = 0;
+        clearInterval(progressTimer);
 
-        // Inner Loop: Cycle through keys for the selected model
-        while (tokensTested < apiClusterPool.length) {
-            const currentToken = getNextApiKey();
-            tokensTested++;
-
-            try {
-                let response = await fetch(currentModel, {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${currentToken}`,
-                        "Content-Type": selectedFileBlob.type
-                    },
-                    body: selectedFileBlob
-                });
-
-                // Case A: Model is loading/sleeping (503). Wait 5 seconds and retry seamlessly.
-                if (response.status === 503) {
-                    loaderLabel.innerText = "Waking up server nodes... Please hold.";
-                    await new Promise(resolve => setTimeout(resolve, 5000));
-                    
-                    // Retry once more with a fresh key
-                    const retryToken = getNextApiKey();
-                    response = await fetch(currentModel, {
-                        method: "POST",
-                        headers: { "Authorization": `Bearer ${retryToken}`, "Content-Type": selectedFileBlob.type },
-                        body: selectedFileBlob
-                    });
-                }
-
-                // Case B: Success! Break loops and fetch the data payload
-                if (response.ok) {
-                    finalImageBlob = await response.blob();
-                    success = true;
-                    break;
-                }
-
-                // Case C: Rate limited (429) -> Immediate loop continue to next token without warning user
-            } catch (err) {
-                // Silently handle network dropouts
-            }
+        if (response.ok) {
+            let finalImageBlob = await response.blob();
+            loaderBar.style.width = "100%";
+            loaderLabel.innerText = "Matrix Optimization Success.";
+            
+            setTimeout(() => {
+                document.getElementById("monetizationView").style.display = "none";
+                document.getElementById("downloadView").style.display = "block";
+                document.getElementById("finalImg").src = URL.createObjectURL(finalImageBlob);
+            }, 700);
+        } else {
+            let errorData = await response.json();
+            alert("Server nodes busy responding to viral load. Shifting layers, please click Upscale again.");
+            resetWorkspace();
         }
-        if (success) break; // Stop checking alternative mirror models
-    }
-
-    clearInterval(progressTimer);
-
-    if (success && finalImageBlob) {
-        loaderBar.style.width = "100%";
-        loaderLabel.innerText = "Matrix Optimization Success.";
-        
-        setTimeout(() => {
-            document.getElementById("monetizationView").style.display = "none";
-            document.getElementById("downloadView").style.display = "block";
-            document.getElementById("finalImg").src = URL.createObjectURL(finalImageBlob);
-        }, 700);
-    } else {
-        // Ultimate fallback if all keys AND all models are completely choked up
-        loaderLabel.innerText = "Rerouting data packets due to high load...";
-        await new Promise(r => setTimeout(r, 4000));
-        alert("The server nodes are highly congested. Shifting data blocks, please try clicking upscale again.");
+    } catch (err) {
+        clearInterval(progressTimer);
+        alert("Connection timed out. Retrying cluster link, please click Upscale again.");
         resetWorkspace();
     }
 }
