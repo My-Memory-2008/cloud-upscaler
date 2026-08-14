@@ -576,7 +576,7 @@
             <h2 style="margin: 0 0 10px 0; font-size: 24px;">Unlimited 4K Web Upscaler</h2>
             <p style="color: #94a3b8; font-size: 14px; margin: 0 0 25px 0;">Powered by client-side neural tensor models. 100% free with unlimited scale.</p>
             
-            <div class="dropzone-box" id="dropZone">
+            <div class="dropzone-box" id="dropZone" onclick="document.getElementById('imgFile').click()">
                 <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--accent); margin-bottom: 10px;"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <p id="uploadLabel" style="margin: 0; font-weight: 500; font-size: 15px;">Click or Drag Image Here</p>
                 <input type="file" id="imgFile" style="display: none;" accept="image/*" onchange="fileSelected(event)">
