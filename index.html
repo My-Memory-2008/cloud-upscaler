@@ -1,17 +1,17 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeuralScale Studio - Free Web 4K AI Upscaler</title>
-    <!-- Tells Google exactly what your site does so it can display a clean description in search results -->
-    <meta name="description" content="Upscale images to ultra 4K resolution completely for free using NeuralScale Studio. No registration, no downloads, and unlimited usage.">
+    <!-- Tells Google exactly what your site does so it can display a clean description in search results --> -->
+    <!-- <meta name="description" content="Upscale images to ultra 4K resolution completely for free using NeuralScale Studio. No registration, no downloads, and unlimited usage."> -->
 
     <!-- Keywords that people might type into Google to find your website -->
-    <meta name="keywords" content="NeuralScale Studio, free image upscaler, 4k upscaler, online photo enhancer, upscale images free, zoom image quality online">
+    <!-- <meta name="keywords" content="NeuralScale Studio, free image upscaler, 4k upscaler, online photo enhancer, upscale images free, zoom image quality online"> -->
 
     <!-- Allows Google's automated search bots to scan and index your website pages -->
-    <meta name="robots" content="index, follow">
+    <!-- <meta name="robots" content="index, follow">
     <meta name="google-site-verification" content="hEs1uMgQgEJLmJgGU-dsp7GAXA_ObM5cGIJsJ3XARS8" />
     
     
@@ -165,14 +165,401 @@
         canvas { 
             display: none; 
         }
-    </style>
+    </style> -->
     
 
-
+<!-- 
 
 </head>
-<body>
+<body> -->
 
+    <!-- <div class="navbar">
+        <div class="logo">NeuralScale Studio</div>
+        <div class="status-pill">Cloud Network: Active</div>
+    </div> -->
+
+    <!-- UPPER BANNER AD DISPLAY SLOT -->
+    <!-- <div class="ad-container" id="adTopSlot">
+        Leaderboard Top Ad Slot (728x90)
+    </div>
+     -->
+
+
+
+
+
+    <!-- <div class="workspace"> -->
+        <!-- VIEW BLOCK A: DRAG & DROP DASHBOARD -->
+        <!-- <div class="card-panel" id="mainWorkspace">
+            <h2 style="margin: 0 0 10px 0; font-size: 24px;">Unlimited 4K Web Upscaler</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin: 0 0 25px 0;">Powered by client-side neural tensor models. 100% free with unlimited scale.</p>
+            
+            <div class="dropzone-box" onclick="document.getElementById('imgFile').click()">
+                <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--accent); margin-bottom: 10px;"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <p id="uploadLabel" style="margin: 0; font-weight: 500; font-size: 15px;">Click or Drag Image Here</p>
+                <input type="file" id="imgFile" style="display: none;" accept="image/*" onchange="fileSelected(event)">
+            </div>
+            <button class="btn-action" style="background: #10b981;" id="procBtn" onclick="processLocalUpscale()" disabled>Upscale Image (Free Tensors)</button>
+        </div> -->
+
+        <!-- VIEW BLOCK B: ADVERTISING PROGRESS VIEWER -->
+        <!-- <div class="card-panel" id="monetizationView" style="display: none;">
+            <h3 style="margin: 0;">Allocating Vector Server Nodes...</h3>
+            <p style="color: #94a3b8; font-size: 13px; margin: 5px 0 0 0;">Synchronizing deep pixel sampling arrays across cluster layers.</p>
+             -->
+            <!-- HIGH PAYING SQUARE BANNER / VIDEO INTERSTITIAL AD REVENUE ENGINE -->
+            <!-- <div class="ad-video-placement" id="adProcessingSlot">
+                Sponsored Video / Square Banner Ad Unit (336x280)
+            </div>
+            
+            <div class="progress-track"><div class="progress-fill" id="fillBar"></div></div>
+            <p id="percentLabel" style="font-size: 13px; color: #10b981; margin: 12px 0 0 0; font-weight: bold;">Processing: 0%</p>
+        </div> -->
+
+        <!-- VIEW BLOCK C: DOWNLOAD PANELS -->
+        <!-- <div class="card-panel" id="downloadView" style="display: none;">
+            <h3 style="margin: 0 0 15px 0; color: #10b981;">Upscaling Matrix Complete!</h3>
+            <img id="finalImg" src="" style="max-width: 100%; max-height: 380px; border-radius: 6px; border: 1px solid #1f222e;"><br>
+            <button class="btn-action" onclick="downloadImage()">Download Enhanced 4K Output</button>
+            <button class="btn-action" style="background: #2e3245; margin-top: 10px;" onclick="resetWorkspace()">Upscale Another Image</button>
+        </div>
+    </div> -->
+
+    <!-- LOWER ANCHOR BANNER AD DISPLAY SLOT -->
+    <!-- <div class="ad-container" id="adBottomSlot">
+        Sticky Footer Bottom Ad Slot (728x90)
+    </div> -->
+
+    <!-- Hidden system graphic matrix buffer responsible for scaling hardware pixels -->
+    <!-- <canvas id="processingCanvas"></canvas> -->
+
+    <!-- <script> 
+
+        // Global variable to store the image object uploaded by the user
+// let uploadedImageElement = null;
+
+/**
+ * Triggered automatically when the user selects or drops an image file.
+ * Handles reading the file bytes locally and loading them into an Image object.
+ */
+// function fileSelected(e) {
+//     const files = e.target.files;
+//     if (files && files.length > 0) {
+//         const file = files[0];
+//         const reader = new FileReader();
+        
+//         reader.onload = function(event) {
+//             uploadedImageElement = new Image();
+//             uploadedImageElement.onload = function() {
+//                 // Update the drag & drop zone text to confirm selection
+//                 document.getElementById("uploadLabel").innerText = "Target Selected: " + file.name;
+//                 // Enable the upscale action button now that a file exists
+//                 document.getElementById("procBtn").disabled = false;
+//             };
+//             uploadedImageElement.src = event.target.result;
+//         };
+//         reader.readAsDataURL(file);
+//     }
+// }
+
+/**
+ * Core business engine. Shifts processing onto the user's browser,
+ * runs the progress bar simulation alongside ads, and applies texture filters.
+ */
+// function processLocalUpscale() {
+//     if (!uploadedImageElement) return;
+
+//     // Instantly swap view panels out of frame bounds to display ads
+//     document.getElementById("mainWorkspace").style.display = "none";
+//     document.getElementById("monetizationView").style.display = "block";
+
+//     let displayPercent = 0;
+//     const loaderBar = document.getElementById("fillBar");
+//     const loaderLabel = document.getElementById("percentLabel");
+
+//     // progress bar updates slowly to force maximum viewing time on active ads
+//     const calculationTimer = setInterval(() => {
+//         if (displayPercent < 96) {
+//             displayPercent += Math.floor(Math.random() * 2) + 1;
+//             loaderBar.style.width = displayPercent + "%";
+//             loaderLabel.innerText = "Re-structuring Texture Projections: " + displayPercent + "%";
+//         }
+//     }, 250);
+
+//     // Asynchronously computes image scaling using browser canvas context matrix transformations
+//     setTimeout(() => {
+//         const canvas = document.getElementById("processingCanvas");
+//         const ctx = canvas.getContext("2d");
+
+//         // Mathematical calculation mapping a 4x size enhancement array boundary
+//         const targetWidth = uploadedImageElement.width * 4;
+//         const targetHeight = uploadedImageElement.height * 4;
+
+//         canvas.width = targetWidth;
+//         canvas.height = targetHeight;
+
+//         // Activate high-end browser interpolation kernel shaders for sharp pixel scaling
+//         ctx.imageSmoothingEnabled = true;
+//         ctx.imageSmoothingQuality = "high";
+
+//         // Render the raw graphics asset expansion array directly onto memory canvas layers
+//         ctx.drawImage(uploadedImageElement, 0, 0, targetWidth, targetHeight);
+
+//         // Export data memory cache cleanly into a client-side base64 string
+//         const upscaledDataUrl = canvas.toDataURL("image/png");
+
+//         // Halt progress loop timers and snap loader bar to absolute completion
+//         clearInterval(calculationTimer);
+//         loaderBar.style.width = "100%";
+//         loaderLabel.innerText = "Matrix Optimization Success.";
+
+//         // Brief delay before showing final download view for smooth visual transition
+//         setTimeout(() => {
+//             document.getElementById("monetizationView").style.display = "none";
+//             document.getElementById("downloadView").style.display = "block";
+//             document.getElementById("finalImg").src = upscaledDataUrl;
+//         }, 700);
+
+//     }, 10000); // 10-Second computing lock period explicitly keeps users interacting with ad elements
+// }
+
+/**
+ * Triggers a direct native browser download action of the processed canvas data string.
+ */
+// function downloadImage() {
+//     const downloadLink = document.createElement("a");
+//     downloadLink.href = document.getElementById("finalImg").src;
+//     downloadLink.download = "neuralscale_4k_" + Date.now() + ".png";
+//     document.body.appendChild(downloadLink);
+//     downloadLink.click();
+//     document.body.removeChild(downloadLink);
+// }
+
+/**
+ * Completely purges previous image memory layers and resets the dashboard to take a new upload.
+ */
+<!-- // function resetWorkspace() {
+//     uploadedImageElement = null;
+//     document.getElementById("imgFile").value = "";
+//     document.getElementById("uploadLabel").innerText = "Click or Drag Image Here";
+//     document.getElementById("procBtn").disabled = true;
+//     document.getElementById("downloadView").style.display = "none";
+//     document.getElementById("monetizationView").style.display = "none";
+//     document.getElementById("mainWorkspace").style.display = "block";
+//     document.getElementById("fillBar").style.width = "0%";
+// } 
+
+ </script> -->
+<!-- </body>
+</html> -->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralScale Studio - Free Web 4K AI Upscaler</title>
+    <!-- Tells Google exactly what your site does so it can display a clean description in search results -->
+    <meta name="description" content="Upscale images to ultra 4K resolution completely for free using NeuralScale Studio. No registration, no downloads, and unlimited usage.">
+
+    <!-- Keywords that people might type into Google to find your website -->
+    <meta name="keywords" content="NeuralScale Studio, free image upscaler, 4k upscaler, online photo enhancer, upscale images free, zoom image quality online">
+
+    <!-- Allows Google's automated search bots to scan and index your website pages -->
+    <meta name="robots" content="index, follow">
+    <meta name="google-site-verification" content="hEs1uMgQgEJLmJgGU-dsp7GAXA_ObM5cGIJsJ3XARS8" />
+    
+    <style>
+        :root { 
+            --bg: #07080a; 
+            --card: #11131a; 
+            --accent: #2563eb; 
+            --text: #ffffff; 
+        }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: system-ui, -apple-system, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .navbar { 
+            width: 100%; 
+            max-width: 1200px; 
+            height: 70px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 20px; 
+            box-sizing: border-box; 
+            border-bottom: 1px solid #1f222e; 
+        }
+        .logo { 
+            font-size: 22px; 
+            font-weight: bold; 
+            background: linear-gradient(to right, #3b82f6, #a855f7); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .status-pill { 
+            background: #064e3b; 
+            border-radius: 30px; 
+            font-size: 13px; 
+            border: 1px solid #059669; 
+            color: #34d399; 
+            padding: 6px 14px; 
+            font-weight: 500; 
+        }
+        .workspace { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            width: 100%; 
+            max-width: 600px; 
+            padding: 20px; 
+            box-sizing: border-box; 
+        }
+        .ad-container { 
+            width: 100%; 
+            max-width: 728px; 
+            height: 90px; 
+            background: var(--card); 
+            border: 1px solid #1f222e; 
+            border-radius: 8px; 
+            margin: 20px 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #4b526d; 
+            font-size: 12px; 
+            font-weight: 500; 
+        }
+        .card-panel { 
+            width: 100%; 
+            background: var(--card); 
+            border: 1px solid #1f222e; 
+            border-radius: 12px; 
+            padding: 30px; 
+            box-sizing: border-box; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+        .btn-action { 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            padding: 14px 28px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            width: 100%; 
+            margin-top: 15px; 
+        }
+        .btn-action:hover { 
+            background: #1d4ed8; 
+        }
+        .btn-action:disabled { 
+            background: #1f222e; 
+            color: #4b526d; 
+            cursor: not-allowed; 
+        }
+        .dropzone-box { 
+            width: 100%; 
+            height: 220px; 
+            border: 2px dashed #2e3245; 
+            border-radius: 8px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            margin-bottom: 15px; 
+            transition: 0.2s; 
+        }
+        .dropzone-box:hover { 
+            border-color: var(--accent); 
+            background: #141722; 
+        }
+        .dropzone-box.active {
+            border-color: var(--accent);
+            background: #141722;
+        }
+        .progress-track { 
+            width: 100%; 
+            height: 6px; 
+            background: #1f222e; 
+            border-radius: 3px; 
+            overflow: hidden; 
+            margin-top: 20px; 
+        }
+        .progress-fill { 
+            width: 0%; 
+            height: 100%; 
+            background: #10b981; 
+            transition: 0.3s; 
+        }
+        .ad-video-placement { 
+            width: 336px; 
+            height: 280px; 
+            background: #000; 
+            margin: 20px auto; 
+            border-radius: 6px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #62688f; 
+            font-size: 13px; 
+            font-weight: 500; 
+        }
+        canvas { 
+            display: none; 
+        }
+        .url-input-container {
+            width: 100%;
+            margin: 15px 0;
+        }
+        .url-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1a1d2a;
+            border: 1px solid #2e3245;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .url-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .url-btn {
+            width: 100%;
+            padding: 12px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .url-btn:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+<body>
     <div class="navbar">
         <div class="logo">NeuralScale Studio</div>
         <div class="status-pill">Cloud Network: Active</div>
@@ -182,11 +569,6 @@
     <div class="ad-container" id="adTopSlot">
         Leaderboard Top Ad Slot (728x90)
     </div>
-    
-
-
-
-
 
     <div class="workspace">
         <!-- VIEW BLOCK A: DRAG & DROP DASHBOARD -->
@@ -194,11 +576,17 @@
             <h2 style="margin: 0 0 10px 0; font-size: 24px;">Unlimited 4K Web Upscaler</h2>
             <p style="color: #94a3b8; font-size: 14px; margin: 0 0 25px 0;">Powered by client-side neural tensor models. 100% free with unlimited scale.</p>
             
-            <div class="dropzone-box" onclick="document.getElementById('imgFile').click()">
+            <div class="dropzone-box" id="dropZone">
                 <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--accent); margin-bottom: 10px;"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <p id="uploadLabel" style="margin: 0; font-weight: 500; font-size: 15px;">Click or Drag Image Here</p>
                 <input type="file" id="imgFile" style="display: none;" accept="image/*" onchange="fileSelected(event)">
             </div>
+            
+            <div class="url-input-container">
+                <input type="url" class="url-input" id="imageUrlInput" placeholder="Or paste image URL here...">
+                <button class="url-btn" onclick="fetchImageUrl()">Fetch Image from URL</button>
+            </div>
+            
             <button class="btn-action" style="background: #10b981;" id="procBtn" onclick="processLocalUpscale()" disabled>Upscale Image (Free Tensors)</button>
         </div>
 
@@ -234,121 +622,218 @@
     <canvas id="processingCanvas"></canvas>
 
     <script>
-
         // Global variable to store the image object uploaded by the user
-let uploadedImageElement = null;
+        let uploadedImageElement = null;
 
-/**
- * Triggered automatically when the user selects or drops an image file.
- * Handles reading the file bytes locally and loading them into an Image object.
- */
-function fileSelected(e) {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-        const file = files[0];
-        const reader = new FileReader();
+        /**
+         * Handle drag and drop events
+         */
+        const dropZone = document.getElementById('dropZone');
         
-        reader.onload = function(event) {
-            uploadedImageElement = new Image();
-            uploadedImageElement.onload = function() {
-                // Update the drag & drop zone text to confirm selection
-                document.getElementById("uploadLabel").innerText = "Target Selected: " + file.name;
-                // Enable the upscale action button now that a file exists
-                document.getElementById("procBtn").disabled = false;
-            };
-            uploadedImageElement.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-/**
- * Core business engine. Shifts processing onto the user's browser,
- * runs the progress bar simulation alongside ads, and applies texture filters.
- */
-function processLocalUpscale() {
-    if (!uploadedImageElement) return;
-
-    // Instantly swap view panels out of frame bounds to display ads
-    document.getElementById("mainWorkspace").style.display = "none";
-    document.getElementById("monetizationView").style.display = "block";
-
-    let displayPercent = 0;
-    const loaderBar = document.getElementById("fillBar");
-    const loaderLabel = document.getElementById("percentLabel");
-
-    // progress bar updates slowly to force maximum viewing time on active ads
-    const calculationTimer = setInterval(() => {
-        if (displayPercent < 96) {
-            displayPercent += Math.floor(Math.random() * 2) + 1;
-            loaderBar.style.width = displayPercent + "%";
-            loaderLabel.innerText = "Re-structuring Texture Projections: " + displayPercent + "%";
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
         }
-    }, 250);
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropZone.classList.add('active');
+        }
+        
+        function unhighlight() {
+            dropZone.classList.remove('active');
+        }
+        
+        // Handle dropped files
+        dropZone.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+        
+        function handleFiles(files) {
+            if (files.length === 0) return;
+            
+            const file = files[0];
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file (JPEG, PNG, etc.)');
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                uploadedImageElement = new Image();
+                uploadedImageElement.onload = function() {
+                    // Update the drag & drop zone text to confirm selection
+                    document.getElementById("uploadLabel").innerText = "Target Selected: " + file.name;
+                    // Enable the upscale action button now that a file exists
+                    document.getElementById("procBtn").disabled = false;
+                };
+                uploadedImageElement.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
 
-    // Asynchronously computes image scaling using browser canvas context matrix transformations
-    setTimeout(() => {
-        const canvas = document.getElementById("processingCanvas");
-        const ctx = canvas.getContext("2d");
+        /**
+         * Triggered automatically when the user selects or drops an image file.
+         * Handles reading the file bytes locally and loading them into an Image object.
+         */
+        function fileSelected(e) {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                handleFiles(files);
+            }
+        }
 
-        // Mathematical calculation mapping a 4x size enhancement array boundary
-        const targetWidth = uploadedImageElement.width * 4;
-        const targetHeight = uploadedImageElement.height * 4;
+        /**
+         * Fetches an image from a URL and loads it into the application
+         */
+        function fetchImageUrl() {
+            const imageUrl = document.getElementById('imageUrlInput').value.trim();
+            
+            if (!imageUrl) {
+                alert('Please enter a valid image URL');
+                return;
+            }
+            
+            // Validate URL format
+            try {
+                new URL(imageUrl);
+            } catch (e) {
+                alert('Please enter a valid URL');
+                return;
+            }
+            
+            // Create a temporary image element to load the image from URL
+            const img = new Image();
+            img.crossOrigin = "Anonymous"; // Handle CORS issues
+            
+            img.onload = function() {
+                uploadedImageElement = img;
+                
+                // Extract filename from URL
+                const urlParts = imageUrl.split('/');
+                const fileName = urlParts[urlParts.length - 1] || 'fetched-image';
+                
+                // Update UI to indicate image is loaded
+                document.getElementById("uploadLabel").innerText = "Fetched: " + fileName;
+                document.getElementById("procBtn").disabled = false;
+                
+                // Clear the input field
+                document.getElementById('imageUrlInput').value = '';
+            };
+            
+            img.onerror = function() {
+                alert('Failed to load image from URL. Please check the URL and try again.');
+            };
+            
+            img.src = imageUrl;
+        }
 
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
+        /**
+         * Core business engine. Shifts processing onto the user's browser,
+         * runs the progress bar simulation alongside ads, and applies texture filters.
+         */
+        function processLocalUpscale() {
+            if (!uploadedImageElement) {
+                alert('Please select an image first');
+                return;
+            }
 
-        // Activate high-end browser interpolation kernel shaders for sharp pixel scaling
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = "high";
+            // Instantly swap view panels out of frame bounds to display ads
+            document.getElementById("mainWorkspace").style.display = "none";
+            document.getElementById("monetizationView").style.display = "block";
 
-        // Render the raw graphics asset expansion array directly onto memory canvas layers
-        ctx.drawImage(uploadedImageElement, 0, 0, targetWidth, targetHeight);
+            let displayPercent = 0;
+            const loaderBar = document.getElementById("fillBar");
+            const loaderLabel = document.getElementById("percentLabel");
 
-        // Export data memory cache cleanly into a client-side base64 string
-        const upscaledDataUrl = canvas.toDataURL("image/png");
+            // progress bar updates slowly to force maximum viewing time on active ads
+            const calculationTimer = setInterval(() => {
+                if (displayPercent < 96) {
+                    displayPercent += Math.floor(Math.random() * 2) + 1;
+                    loaderBar.style.width = displayPercent + "%";
+                    loaderLabel.innerText = "Re-structuring Texture Projections: " + displayPercent + "%";
+                }
+            }, 250);
 
-        // Halt progress loop timers and snap loader bar to absolute completion
-        clearInterval(calculationTimer);
-        loaderBar.style.width = "100%";
-        loaderLabel.innerText = "Matrix Optimization Success.";
+            // Asynchronously computes image scaling using browser canvas context matrix transformations
+            setTimeout(() => {
+                const canvas = document.getElementById("processingCanvas");
+                const ctx = canvas.getContext("2d");
 
-        // Brief delay before showing final download view for smooth visual transition
-        setTimeout(() => {
+                // Mathematical calculation mapping a 4x size enhancement array boundary
+                const targetWidth = uploadedImageElement.width * 4;
+                const targetHeight = uploadedImageElement.height * 4;
+
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+
+                // Activate high-end browser interpolation kernel shaders for sharp pixel scaling
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = "high";
+
+                // Render the raw graphics asset expansion array directly onto memory canvas layers
+                ctx.drawImage(uploadedImageElement, 0, 0, targetWidth, targetHeight);
+
+                // Export data memory cache cleanly into a client-side base64 string
+                const upscaledDataUrl = canvas.toDataURL("image/png");
+
+                // Halt progress loop timers and snap loader bar to absolute completion
+                clearInterval(calculationTimer);
+                loaderBar.style.width = "100%";
+                loaderLabel.innerText = "Matrix Optimization Success.";
+
+                // Brief delay before showing final download view for smooth visual transition
+                setTimeout(() => {
+                    document.getElementById("monetizationView").style.display = "none";
+                    document.getElementById("downloadView").style.display = "block";
+                    document.getElementById("finalImg").src = upscaledDataUrl;
+                }, 700);
+
+            }, 10000); // 10-Second computing lock period explicitly keeps users interacting with ad elements
+        }
+
+        /**
+         * Triggers a direct native browser download action of the processed canvas data string.
+         */
+        function downloadImage() {
+            const downloadLink = document.createElement("a");
+            downloadLink.href = document.getElementById("finalImg").src;
+            downloadLink.download = "neuralscale_4k_" + Date.now() + ".png";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+
+        /**
+         * Completely purges previous image memory layers and resets the dashboard to take a new upload.
+         */
+        function resetWorkspace() {
+            uploadedImageElement = null;
+            document.getElementById("imgFile").value = "";
+            document.getElementById("imageUrlInput").value = "";
+            document.getElementById("uploadLabel").innerText = "Click or Drag Image Here";
+            document.getElementById("procBtn").disabled = true;
+            document.getElementById("downloadView").style.display = "none";
             document.getElementById("monetizationView").style.display = "none";
-            document.getElementById("downloadView").style.display = "block";
-            document.getElementById("finalImg").src = upscaledDataUrl;
-        }, 700);
-
-    }, 10000); // 10-Second computing lock period explicitly keeps users interacting with ad elements
-}
-
-/**
- * Triggers a direct native browser download action of the processed canvas data string.
- */
-function downloadImage() {
-    const downloadLink = document.createElement("a");
-    downloadLink.href = document.getElementById("finalImg").src;
-    downloadLink.download = "neuralscale_4k_" + Date.now() + ".png";
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-}
-
-/**
- * Completely purges previous image memory layers and resets the dashboard to take a new upload.
- */
-function resetWorkspace() {
-    uploadedImageElement = null;
-    document.getElementById("imgFile").value = "";
-    document.getElementById("uploadLabel").innerText = "Click or Drag Image Here";
-    document.getElementById("procBtn").disabled = true;
-    document.getElementById("downloadView").style.display = "none";
-    document.getElementById("monetizationView").style.display = "none";
-    document.getElementById("mainWorkspace").style.display = "block";
-    document.getElementById("fillBar").style.width = "0%";
-}
-
+            document.getElementById("mainWorkspace").style.display = "block";
+            document.getElementById("fillBar").style.width = "0%";
+        }
     </script>
 </body>
 </html>
