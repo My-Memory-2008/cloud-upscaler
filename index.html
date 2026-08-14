@@ -357,6 +357,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -496,6 +497,42 @@
             border-color: var(--accent);
             background: #141722;
         }
+        .preview-image {
+            width: 100%;
+            height: 220px;
+            border-radius: 8px;
+            object-fit: contain;
+            border: 2px dashed #2e3245;
+        }
+        .preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .preview-overlay:hover {
+            opacity: 1;
+        }
+        .preview-overlay p {
+            margin: 0 0 10px 0;
+            color: white;
+            font-weight: 500;
+        }
+        .preview-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            margin-bottom: 15px;
+        }
         .progress-track { 
             width: 100%; 
             height: 6px; 
@@ -576,10 +613,19 @@
             <h2 style="margin: 0 0 10px 0; font-size: 24px;">Unlimited 4K Web Upscaler</h2>
             <p style="color: #94a3b8; font-size: 14px; margin: 0 0 25px 0;">Powered by client-side neural tensor models. 100% free with unlimited scale.</p>
             
-            <div class="dropzone-box" id="dropZone" onclick="document.getElementById('imgFile').click()">
+            <div class="preview-container" id="previewContainer" style="display: none;">
+                <img id="previewImage" class="preview-image" src="" alt="Preview">
+                <div class="preview-overlay" id="previewOverlay">
+                    <p>Click to replace image</p>
+                    <input type="file" id="imgFile" style="display: none;" accept="image/*" onchange="fileSelected(event)">
+                    <button class="btn-action" style="background: #ef4444; padding: 8px 16px; width: auto;" onclick="removePreview()">Remove Image</button>
+                </div>
+            </div>
+            
+            <div class="dropzone-box" id="dropZone" onclick="document.getElementById('imgFile').click()" style="display: block;">
                 <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--accent); margin-bottom: 10px;"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <p id="uploadLabel" style="margin: 0; font-weight: 500; font-size: 15px;">Click or Drag Image Here</p>
-                <input type="file" id="imgFile" style="display: none;" accept="image/*" onchange="fileSelected(event)">
+                <input type="file" id="imgFile2" style="display: none;" accept="image/*" onchange="fileSelected(event)">
             </div>
             
             <div class="url-input-container">
@@ -680,6 +726,10 @@
                 uploadedImageElement.onload = function() {
                     // Update the drag & drop zone text to confirm selection
                     document.getElementById("uploadLabel").innerText = "Target Selected: " + file.name;
+                    
+                    // Show preview of the uploaded image in place of the dropzone
+                    showPreview(event.target.result);
+                    
                     // Enable the upscale action button now that a file exists
                     document.getElementById("procBtn").disabled = false;
                 };
@@ -731,6 +781,11 @@
                 
                 // Update UI to indicate image is loaded
                 document.getElementById("uploadLabel").innerText = "Fetched: " + fileName;
+                
+                // Show preview of the fetched image in place of the dropzone
+                showPreview(imageUrl);
+                
+                // Enable the upscale action button now that a file exists
                 document.getElementById("procBtn").disabled = false;
                 
                 // Clear the input field
@@ -742,6 +797,36 @@
             };
             
             img.src = imageUrl;
+        }
+
+        /**
+         * Displays a preview of the uploaded/fetched image in place of the dropzone
+         */
+        function showPreview(src) {
+            const previewContainer = document.getElementById('previewContainer');
+            const previewImage = document.getElementById('previewImage');
+            const dropZone = document.getElementById('dropZone');
+            
+            previewImage.src = src;
+            previewContainer.style.display = 'block';
+            dropZone.style.display = 'none';
+        }
+
+        /**
+         * Removes the preview image and resets the upload state
+         */
+        function removePreview() {
+            const previewContainer = document.getElementById('previewContainer');
+            const dropZone = document.getElementById('dropZone');
+            
+            previewContainer.style.display = 'none';
+            dropZone.style.display = 'flex';
+            
+            uploadedImageElement = null;
+            document.getElementById("imgFile").value = "";
+            document.getElementById("imgFile2").value = "";
+            document.getElementById("uploadLabel").innerText = "Click or Drag Image Here";
+            document.getElementById("procBtn").disabled = true;
         }
 
         /**
@@ -826,6 +911,7 @@
         function resetWorkspace() {
             uploadedImageElement = null;
             document.getElementById("imgFile").value = "";
+            document.getElementById("imgFile2").value = "";
             document.getElementById("imageUrlInput").value = "";
             document.getElementById("uploadLabel").innerText = "Click or Drag Image Here";
             document.getElementById("procBtn").disabled = true;
@@ -833,6 +919,10 @@
             document.getElementById("monetizationView").style.display = "none";
             document.getElementById("mainWorkspace").style.display = "block";
             document.getElementById("fillBar").style.width = "0%";
+            
+            // Reset to show the dropzone again
+            document.getElementById("previewContainer").style.display = "none";
+            document.getElementById("dropZone").style.display = "flex";
         }
     </script>
 </body>
